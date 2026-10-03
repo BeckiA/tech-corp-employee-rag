@@ -1,80 +1,95 @@
-# TechCorp Employee RAG App
+# TechCorp Employee RAG App with Interactive Gradio UI
 
-This project builds a vector database from a PDF document using LangChain, Chroma, and Google Generative AI embeddings. The script loads a PDF, splits it into chunks, creates embeddings, and stores them in a local Chroma database for retrieval-augmented generation workflows.
+This project builds a full-featured Retrieval-Augmented Generation (RAG) system with a modern, interactive Gradio web interface. It processes PDF documents, splits text into chunks, computes vector embeddings using Google Generative AI, stores them in ChromaDB, and synthesizes concise factual answers using Gemini 3.5 Flash.
 
-## What this project does
+## ✨ Features & UI Highlights
 
-The current implementation in `rag_app.py`:
+- **Interactive Web Interface**: Built with Gradio featuring a glassmorphism dark theme.
+- **Live Process Loading States**: Every stage of document ingestion and RAG query execution is visualized in real-time with step-by-step progress spinners and indicators:
+  1. 🔍 **Step 1: Vector Search** (Querying ChromaDB for relevant chunks)
+  2. 📄 **Step 2: Context Parsing** (Formatting source passages & metadata)
+  3. 🧠 **Step 3: Gemini AI Synthesis** (Generating concise response)
+- **Document Management**: Upload any custom PDF or use the included `TechCorp_Official_Employee_Handbook.pdf`.
+- **Context Inspector**: Expandable panel showing exact source text passages retrieved from the PDF for transparency.
+- **Hyperparameter Controls**: Adjust Top-K retrieved passages, temperature, chunk size, and chunk overlap on the fly.
+- **Quick Sample Prompts**: One-click preset buttons for common employee handbook queries (remote work, PTO, health benefits, data privacy).
 
-- loads a PDF file from the project directory
-- splits the document into text chunks
-- creates embeddings with `GoogleGenerativeAIEmbeddings`
-- stores the embedded chunks in `./chroma_db` using Chroma
-
-## Project structure
+## 📁 Project Structure
 
 ```text
 my-rag-project/
-├── rag_app.py
-├── .env
+├── rag_app.py                            # Main application with Gradio UI & RAG pipeline
+├── .env                                  # API key configuration
 ├── .gitignore
-├── TechCorp_Official_Employee_Handbook.pdf
-├── chroma_db/
+├── TechCorp_Official_Employee_Handbook.pdf # Default PDF knowledge base
+├── chroma_db/                            # Local Chroma vector database
 └── README.md
 ```
 
-## Prerequisites
+## 🚀 How to Run using Virtual Environment (`venv`)
 
-- Python 3.10+
-- A Google API key with access to Gemini embeddings
-- A PDF file to index
+### Option 1: Direct Execution (Quickest & Works Anywhere)
 
-## Setup
+Run the script directly using the virtual environment's Python binary without activating:
 
-1. Open a terminal in the project folder.
-2. Create and activate a virtual environment if desired.
-3. Install the required packages:
+- **PowerShell / Command Prompt:**
+  ```powershell
+  .\venv\Scripts\python.exe rag_app.py
+  ```
 
-```bash
-pip install python-dotenv langchain langchain-community langchain-text-splitters langchain-google-genai pypdf chromadb
+- **Git Bash:**
+  ```bash
+  ./venv/Scripts/python.exe rag_app.py
+  ```
+
+---
+
+### Option 2: Activate `venv` First, Then Run
+
+Activate the environment depending on your terminal type:
+
+#### 1️⃣ PowerShell
+```powershell
+.\venv\Scripts\Activate.ps1
+python rag_app.py
 ```
+*(If PowerShell blocks script execution, run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process` first).*
 
-4. Create a `.env` file in the project root with your Google API key:
-
-```env
-GOOGLE_API_KEY=your_google_api_key_here
-```
-
-5. Make sure the PDF file exists in the project folder. The script currently expects:
-
-```text
-TechCorp_Official_Employee_Handbook.pdf
-```
-
-If your file has a different name, update the path in `rag_app.py`.
-
-## Run the app
-
-```bash
+#### 2️⃣ Command Prompt (cmd.exe)
+```cmd
+venv\Scripts\activate.bat
 python rag_app.py
 ```
 
-This will process the PDF and build the Chroma vector store in the `./chroma_db` directory.
+#### 3️⃣ Git Bash
+```bash
+source venv/Scripts/activate
+python rag_app.py
+```
 
-## Notes
+---
 
-- The current script builds the knowledge base but does not yet add a query/retrieval interface.
-- The vector database is persisted locally in `./chroma_db` and can be reused for later retrieval steps.
-- If you want to extend this into a full chatbot or question-answering app, the next step is to add a retriever and LLM prompt chain.
+## ⚙️ Initial Setup & Prerequisites
 
-## Environment variables
+### 1. Prerequisites
+- Python 3.10+
+- Google Gemini API Key (`GOOGLE_API_KEY` or `GEMINI_API_KEY`)
 
-The script uses:
+### 2. Install Dependencies into `venv`
+```bash
+.\venv\Scripts\pip.exe install python-dotenv langchain langchain-community langchain-text-splitters langchain-google-genai pypdf chromadb gradio
+```
 
-- `GOOGLE_API_KEY` for Google Gemini access
+### 3. Configure API Key
+Create or edit `.env` in the root directory:
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+```
 
-## Troubleshooting
+### 4. Access the Web App
+Once running, open your web browser at:
+`http://127.0.0.1:7860`
 
-- If the script fails to import packages, install the dependencies listed above.
-- If embeddings fail, verify that your Google API key is valid and has access to the required generative AI services.
-- If the PDF is not found, confirm that the file exists in the project root and matches the name in the script.
+## ⚙️ Environment Variables
+
+- `GOOGLE_API_KEY` or `GEMINI_API_KEY`: Required for Google Gemini embeddings and LLM inference.
